@@ -85,7 +85,7 @@ class UserController extends AbstractController
 
     public function execute($functionName, $username)
     {
-        $function = $this->em->getRepository(User::class)->findOneBy(['name' => $functionName]);
+        $function = $this->em->getRepository(Functions::class)->findOneBy(['name' => $functionName]);
         $user = $this->em->getRepository(User::class)->findOneBy(['username' => $username]);
 
         // check if the function and the user exist in the database

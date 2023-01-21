@@ -15,6 +15,14 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class UserController extends AbstractController
 {
+
+    private $em;
+
+     public function __construct(EntityManagerInterface $em)
+    {
+        $this->em = $em;
+    }
+
     #[Route('/user', name: 'app_user')]
     public function index(UserRepository $userRepository): Response
     {
@@ -26,7 +34,7 @@ class UserController extends AbstractController
     }
 
     
-      #[Route('/user/new', name:"user_new", methods:'{"GET","POST"}')]    
+      #[Route('/user/new', name:"user_new", methods:'{"GET","POST"}')]
      public function new(Request $request): Response
     {
         $user = new User();
@@ -73,6 +81,24 @@ class UserController extends AbstractController
             'user' => $user,
             'form' => $form->createView(),
         ]);
+    }
+
+    public function execute($functionName, $username)
+    {
+        $function = $this->em->getRepository(User::class)->findOneBy(['name' => $functionName]);
+        $user = $this->em->getRepository(User::class)->findOneBy(['username' => $username]);
+
+        // check if the function and the user exist in the database
+        if (!$function || !$user) {
+            throw new \Exception('Function or user not found');
+        }
+
+        // check if the user has access to the function
+        if ($user->hasAccessToFunction($function)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

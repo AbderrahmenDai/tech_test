@@ -24,6 +24,9 @@ class Modules
     #[ORM\ManyToMany(targetEntity: Access::class, inversedBy: 'modules')]
     private Collection $accesses;
 
+    #[ORM\Column(length: 255)]
+    private ?string $accessRule = null;
+
     public function __construct()
     {
         $this->functions = new ArrayCollection();
@@ -99,6 +102,18 @@ class Modules
     public function removeAccess(Access $access): self
     {
         $this->accesses->removeElement($access);
+
+        return $this;
+    }
+
+    public function getAccessRule(): ?string
+    {
+        return $this->accessRule;
+    }
+
+    public function setAccessRule(string $accessRule): self
+    {
+        $this->accessRule = $accessRule;
 
         return $this;
     }

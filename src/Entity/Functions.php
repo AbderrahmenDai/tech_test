@@ -20,6 +20,9 @@ class Functions
     #[ORM\JoinColumn(nullable: false)]
     private ?Modules $modules = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $moduleAccessRule = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -45,6 +48,18 @@ class Functions
     public function setModules(?Modules $modules): self
     {
         $this->modules = $modules;
+
+        return $this;
+    }
+
+    public function getModuleAccessRule(): ?string
+    {
+        return $this->moduleAccessRule;
+    }
+
+    public function setModuleAccessRule(string $moduleAccessRule): self
+    {
+        $this->moduleAccessRule = $moduleAccessRule;
 
         return $this;
     }

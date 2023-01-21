@@ -32,6 +32,8 @@ class Access
     public function __construct()
     {
         $this->modules = new ArrayCollection();
+        $this->users = new ArrayCollection();
+        $this->groups = new ArrayCollection();
     }
 
     public function getId(): ?int

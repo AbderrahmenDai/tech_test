@@ -2,13 +2,15 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
+use App\Entity\Group;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class AccessController extends AbstractController
 {
-    #[Route('/access/user/{id}', name: 'app_access')]
+    #[Route('/access/user/{id}', name: 'access_user')]
     public function index(Request $request, User $user)
     {
         $form = $this->createForm(AccessRightsType::class, $user);
@@ -31,7 +33,7 @@ class AccessController extends AbstractController
 
     }
 
-    #[Route('/access/group/{id}', name: 'app_access')]
+    #[Route('/access/group/{id}', name: 'access_group')]
      public function groupAccessRights(Request $request, Group $group)
     {
 
@@ -49,6 +51,25 @@ class AccessController extends AbstractController
 
         return $this->render('access_rights/group.html.twig', [
             'group' => $group,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/access/create', name: 'access_create')]
+    public function createAccess(Request $request, EntityManagerInterface $em)
+    {
+        $form = $this->createForm(AccessRightType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $accessRight = $form->getData();
+            $em->persist($accessRight);
+            $em->flush();
+
+            return $this->redirectToRoute('access_list');
+        }
+
+        return $this->render('access/create.html.twig', [
             'form' => $form->createView(),
         ]);
     }

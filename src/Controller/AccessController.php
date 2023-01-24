@@ -73,5 +73,24 @@ class AccessController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+    public function checkAccess(string $username, string $module, string $function)
+    {
+    $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['username' => $username]);
+     if($user) {
+        $accessControl = $this->getDoctrine()->getRepository(Access::class)->findOneBy(['user' => $user, 'module' => $module, 'function' => $function]);
+        if($accessControl && $accessControl->getCanAccess()) {
+            return true;
+        }
+        $group = $user->getGroup();
+        if($group) {
+            $accessControl = $this->getDoctrine()->getRepository(Access::class)->findOneBy(['group' => $group, 'module' => $module, 'function' => $function]);
+            if($accessControl && $accessControl->getCanAccess()) {
+                return true;
+            }
+        }
+     }
+    return false;
+    }
 }
 

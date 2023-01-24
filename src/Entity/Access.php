@@ -18,6 +18,8 @@ class Access
     #[ORM\ManyToOne(inversedBy: 'accesses')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
+ 
+    private ?bool $canAccess = null;
 
     #[ORM\ManyToOne(inversedBy: 'accesses')]
     #[ORM\JoinColumn(nullable: false)]
@@ -28,6 +30,8 @@ class Access
 
     #[ORM\ManyToMany(targetEntity: Modules::class, mappedBy: 'accesses')]
     private Collection $modules;
+
+    
 
     public function __construct()
     {
@@ -51,6 +55,16 @@ class Access
         $this->user = $user;
 
         return $this;
+    }
+
+    public function getCanAccess(): bool
+    { 
+        return this->canAccess;
+    }
+
+    public function setCanAccess(?bool $canAccess): self
+    {
+        return $this->canAccess = $canAccess;
     }
 
     public function getGroup(): ?Group

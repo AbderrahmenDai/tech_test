@@ -18,7 +18,7 @@ class UserController extends AbstractController
 
     private $em;
 
-     public function __construct(EntityManagerInterface $em)
+     public function __construct()
     {
         $this->em = $em;
     }
@@ -94,11 +94,42 @@ class UserController extends AbstractController
         }
 
         // check if the user has access to the function
-        if ($user->hasAccessToFunction($function)) {
+        if ($user->hasAccess($function)) {
             return true;
         } else {
             return false;
         }
+    }
+
+    public function hasAccess(string $username, string $functionName): bool
+    {
+        // Get the user from the database
+        $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['username' => $username]);
+            if (!$user) {
+            return false;
+            }
+
+        // Get the function from the database
+        $function = $this->getDoctrine()->getRepository(Functions::class)->findOneBy(['name' => $functionName]);
+            if (!$function) {
+            return false;
+            }
+
+        // Check if the user has direct access to the function
+        $accessControl = $this->getDoctrine()->getRepository(AccessControl::class)->findOneBy(['user' => $user, 'function' => $function]);
+            if ($accessControl && $accessControl->getCanAccess()) {
+            return true;
+            }
+
+        // Check if the user has access to the function through their group
+        $group = $user->getGroup();
+            if ($group) {
+            $accessControl = $this->getDoctrine()->getRepository(AccessControl::class)->findOneBy(['group' => $group, 'function' => $function]);
+            if ($accessControl && $accessControl->getCanAccess()) {
+            return true;
+            }
+        }
+    return false;
     }
 
 }

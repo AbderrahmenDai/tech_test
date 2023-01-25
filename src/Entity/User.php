@@ -16,16 +16,15 @@ class User
     #[ORM\Column]
     private ?int $id = null;
 
-     /**
-     * @[ORM\Column( length: 255, unique=true)]
-     * @Assert\NotBlank()
-     */
-    #[ORM\Column(length: 255)]
-    private $username;
+    #[ORM\Column(length: 255, unique: true)]
+    private ?string $username;
+
+    #[ORM\ManyToOne(targetEntity: Group::class, inversedBy: "user")]
+    #[ORM\JoinColumn(nullable: false)]
+    private Collection $group;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Access::class)]
     private Collection $accesses;
-
 
     public function __construct()
     {
@@ -49,9 +48,17 @@ class User
         return $this;
     }
 
-    /**
-     * @return Collection<int, Group>
-     */
+    public function getGroup(): ?Group
+    {
+        return $this->group;
+    }
+
+    public function setGroup(Group $group): self
+    {
+        $this->group = $group;
+
+        return $this;
+    }
 
     /**
      * @return Collection<int, Access>

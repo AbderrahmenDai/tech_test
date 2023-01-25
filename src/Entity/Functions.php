@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\FunctionsRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Module;
 
 #[ORM\Entity(repositoryClass: FunctionsRepository::class)]
 class Functions

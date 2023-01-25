@@ -19,7 +19,7 @@ class Group
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'no')]
+    #[ORM\OneToMany(targetEntity: User::class, mappedBy: "groups")]
     private Collection $users;
 
     public function __construct()

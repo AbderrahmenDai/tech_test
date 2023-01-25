@@ -33,7 +33,6 @@ class UserController extends AbstractController
 
     }
 
-    
       #[Route('/user/new', name:"user_new", methods:'{"GET","POST"}')]
      public function new(Request $request): Response
     {
@@ -55,7 +54,6 @@ class UserController extends AbstractController
         ]);
     }
 
-     
     #[Route("/user/{id}", name:"user_show", methods:'{"GET"}')]
     public function show(User $user): Response
     {
@@ -83,6 +81,7 @@ class UserController extends AbstractController
         ]);
     }
 
+    // this function must remplace by the fuction hasAccess
     public function execute($functionName, $username)
     {
         $function = $this->em->getRepository(Functions::class)->findOneBy(['name' => $functionName]);
@@ -101,6 +100,7 @@ class UserController extends AbstractController
         }
     }
 
+    // this the right function i think
     public function hasAccess(string $username, string $functionName): bool
     {
         // Get the user from the database

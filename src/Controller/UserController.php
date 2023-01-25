@@ -81,24 +81,24 @@ class UserController extends AbstractController
         ]);
     }
 
-    // this function must remplace by the fuction hasAccess
-    public function execute($functionName, $username)
-    {
-        $function = $this->em->getRepository(Functions::class)->findOneBy(['name' => $functionName]);
-        $user = $this->em->getRepository(User::class)->findOneBy(['username' => $username]);
+    // // this function must remplace by the fuction hasAccess
+    // public function execute($functionName, $username)
+    // {
+        // // $function = $this->em->getRepository(Functions::class)->findOneBy(['name' => $functionName]);
+        // // $user = $this->em->getRepository(User::class)->findOneBy(['username' => $username]);
 
-        // check if the function and the user exist in the database
-        if (!$function || !$user) {
-            throw new \Exception('Function or user not found');
-        }
+        // // check if the function and the user exist in the database
+        // if (!$function || !$user) {
+            // throw new \Exception('Function or user not found');
+        // }
 
-        // check if the user has access to the function
-        if ($user->hasAccess($function)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+        // // check if the user has access to the function
+        // if ($user->hasAccess($function)) {
+            // return true;
+        // } else {
+            // return false;
+        // }
+    // }
 
     // this the right function i think
     public function hasAccess(string $username, string $functionName): bool
